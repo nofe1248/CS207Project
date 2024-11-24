@@ -36,6 +36,8 @@ module uart_baud_rate_generator(
     wire [CNT_WIDTH-1:0] internal_cnt_minus_1;
     
     //body
+    assign internal_cnt_minus_1 = internal_cnt - 1'b1;
+    
     always @(posedge clk)
     begin
         if (rst)

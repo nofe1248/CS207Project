@@ -4,7 +4,7 @@ module uart_tx(
     input clk,
     input rst,
     input char_fifo_empty,
-    input [7:0] char_fifo_doutm
+    input [7:0] char_fifo_dout,
     
     output char_fifo_rd_en,
     output tx
