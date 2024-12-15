@@ -19,73 +19,73 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 module hood_top1 (
-    input clk, reset, btn_on_off,                // Ê±ÖÓĞÅºÅ, ,¿ª¹Ø»ú°´¼ü
+    input clk, reset, btn_on_off,// æ—¶é’Ÿä¿¡å·,å¤ä½ä¿¡å· ,å¼€å…³æœºæŒ‰é”®ä¿¡å·
     
-    input set,// µ÷Õû³ö³¡ÉèÖÃ
-    input [3:0] times,//ĞŞ¸ÄÄÚ²¿ÉèÖÃ
+    input set,// è°ƒæ•´å‡ºåœºè®¾ç½®å°±æ˜¯è®¾ç½®å‚æ•°ï¼Œç”¨æŒ‰é’®
+    input [3:0] times,//ä¿®æ”¹å†…éƒ¨è®¾ç½®
      
-    input menu,//¿ÉÒÔ¿ØÖÆÊÇ·ñ¿ÉÒÔµ÷¿ØÄ£Ê½
-    input [3:0] btn_mode_smoke,//Ä£Ê½Óëµ²Î»
+    input menu,//å¯ä»¥æ§åˆ¶æ˜¯å¦å¯ä»¥è°ƒæ§æ¨¡å¼ï¼ŒæŒ‰é’®
+    input [3:0] btn_mode_smoke,//æ¨¡å¼ä¸æŒ¡ä½
 
 
-    input [1:0]set_all_times,
-    input [5:0] btn_time_set,//Ê±¼äÉèÖÃ¼ü
-    input light,
+    input [1:0]set_all_times,//è®¾ç½®å†…éƒ¨æ—¶é—´
+    input [5:0] btn_time_set,//æ—¶é—´è®¾ç½®é”®
+    input light,//æ˜¯å¦å¼€ç¯
     
-    output button,
-    output light_on,// ÕÕÃ÷¹¦ÄÜ
-    output clk_out,
-    output ifoutput,
-    output [3:0] state_smoke_lvl,
-    output xinhao1
+    output button,//æµ‹è¯•ä½¿ç”¨ï¼Œä¸éœ€è¦å®ä¾‹åŒ–
+    output light_on,// ç…§æ˜åŠŸèƒ½
+    output clk_out,//æµ‹è¯•ä½¿ç”¨ï¼Œä¸éœ€è¦å®ä¾‹åŒ–
+    output ifoutput,//æ˜¯å¦å¼€æœº
+    output [3:0] state_smoke_lvl,//æ¡£ä½
+    output xinhao1//æµ‹è¯•ä½¿ç”¨ï¼Œä¸éœ€è¦å®ä¾‹åŒ–
 );
     wire state;
-    //·ÖÆµ
-    wire clk_1Hz;//Ò»ÃëµÄ¡¤ÆµÂÊ
+    //åˆ†é¢‘
+    wire clk_1Hz;//ä¸€ç§’çš„Â·é¢‘ç‡
     wire clk_100Hz;
     frequency_divider frequency(
     .clk(clk),
     .reset(reset),
-    //Êä³ö
+    //è¾“å‡º
     .clk_out(clk_1Hz),
     .clk_out2(clk_100Hz)
     );
     assign clk_out=clk_1Hz;
     //---------------------------------------------------------------------------------
-    //¿ª¹Ø»ú
+    //å¼€å…³æœº
     wire power_on;
     all_input inputs(
       .clk_100Hz(clk_100Hz),
       .clk(clk),
       .reset(reset),
-      .power_button(btn_on_off),//¿ª¹Ø¼ü
-      //Êä³ö
-      .power_on(power_on) // ¿ª¹Ø»ú×´Ì¬Êä³ö
+      .power_button(btn_on_off),//å¼€å…³é”®
+      //è¾“å‡º
+      .power_on(power_on) // å¼€å…³æœºçŠ¶æ€è¾“å‡º
       );
       assign ifoutput=power_on;
       assign button=btn_on_off;
       //----------------------------------------------------------------------------
-      //Ê±¼äÉèÖÃ
-    wire [3:0] initials[3:0];//ÌáĞÑµÄÊ±¼ä£¬×ÔÇå½àµÄÊ±¼ä£¬ÈıµµµÄµ¹¼ÆÊ±£¬¿ª¹Ø»úµÄÊ±¼ä
+      //æ—¶é—´è®¾ç½®
+    wire [3:0] initials[3:0];//æé†’çš„æ—¶é—´ï¼Œè‡ªæ¸…æ´çš„æ—¶é—´ï¼Œä¸‰æ¡£çš„å€’è®¡æ—¶ï¼Œå¼€å…³æœºçš„æ—¶é—´
     resets resets(
     .clk(clk),
     .set(set),
     .reset(reset),
     .times(times),
-    //Êä³ö
+    //è¾“å‡º
     .out_data0(initials[0]),
     .out_data1(initials[1]),
     .out_data2(initials[2]),
     .out_data3(initials[3])
     );
   //----------------------------------------------------------------------------------
-  //µÆµÄ¿ª¹Ø
+  //ç¯çš„å¼€å…³
   light lighton(
     .clk(clk),
     .reset(reset),
     .power_on(power_on),
     .light(light),
-    //Êä³ö
+    //è¾“å‡º
     .light_on(light_on)
   );
   //----------------------------------------------------------------------------------
@@ -104,8 +104,8 @@ module hood_top1 (
         
         .btn_mode_smoke(btn_mode_smoke),
         
-        //Êä³ö
-        .state(state),// µ±Ç°×´Ì¬
+        //è¾“å‡º
+        .state(state),// å½“å‰çŠ¶æ€
         .state_smoke_lvl(state_smoke_lvl),
         .xinhao1(xinhao1)
     );
@@ -117,14 +117,14 @@ module hood_top1 (
         .power_on(power_on),
         
         .set_all_times(set_all_times),
-        .btn_time_set( btn_time_set),//Ê±¼äÉèÖÃ
-        .state(state),// µ±Ç°×´Ì¬        
-        //Êä³ö
-        .hour(hour),// µ±Ç°Ğ¡Ê±
-        .minute(minute),// µ±Ç°·ÖÖÓ
-        .second(second),// µ±Ç°ÃëÊı
+        .btn_time_set( btn_time_set),//æ—¶é—´è®¾ç½®
+        .state(state),// å½“å‰çŠ¶æ€        
+        //è¾“å‡º
+        .hour(hour),// å½“å‰å°æ—¶
+        .minute(minute),// å½“å‰åˆ†é’Ÿ
+        .second(second),// å½“å‰ç§’æ•°
         
-        .work_hours(work_hours),// ÀÛ¼Æ¹¤×÷Ê±³¤£¨µ¥Î»£ºĞ¡Ê±£©
+        .work_hours(work_hours),// ç´¯è®¡å·¥ä½œæ—¶é•¿ï¼ˆå•ä½ï¼šå°æ—¶ï¼‰
         .remind(remind)        
     );
 //-----------------------------------------------------------------------------------------
