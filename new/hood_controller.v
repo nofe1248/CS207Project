@@ -138,7 +138,7 @@ module hood_controller (
                                 end
                                 else
                                 begin
-                                    state_smoke_lvl<=STANDBY;state<=STANDBY;
+                                    state_smoke_lvl<=STANDBY;state<=STANDBY1;
                                     xinhao<=0;
                                 end
                             end
@@ -146,12 +146,12 @@ module hood_controller (
                             begin
                                 if(state_smoke_lvl==CLEANING)begin
                                     if(cleaning_done)begin
-                                        state_smoke_lvl<=STANDBY;state<=STANDBY;
+                                        state_smoke_lvl<=STANDBY;state<=STANDBY1;
                                     end
                                 end
                                 if(state_smoke_lvl==SMOKING_lvl3)begin
                                     if(SMOKING_lvl3_done)begin
-                                        state_smoke_lvl<=STANDBY;state<=STANDBY;
+                                        state_smoke_lvl<=STANDBY;state<=STANDBY1;
                                     end
                                 end
                             end
@@ -180,7 +180,7 @@ module hood_controller (
         end
         else
         begin
-            if (state == CLEANING) begin
+            if (state == CLEANING1) begin
                 time_counter<=time_counter+1;  // 每秒钟计时
                                     // 每秒钟更新秒、分钟、小时
                 if (time_counter == 100) begin
@@ -220,7 +220,7 @@ module hood_controller (
        end
        else
        begin
-           if (state == SMOKING_lvl3) begin
+           if (state_smoke_lvl == SMOKING_lvl3) begin
                SMOKING_lvl3_counter<=SMOKING_lvl3_counter+1;  // 每秒钟计时
                                    // 每秒钟更新秒、分钟、小时
                if (SMOKING_lvl3_counter == 100) begin
