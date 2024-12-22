@@ -43,7 +43,7 @@ module hood_top1 (
     output [3:0] state_smoke_lvl,
 //    output xinhao1
 
-    output [5:0]cur_hour,[5:0]cur_min,
+    output [5:0]cur_hour,[5:0]cur_min,[5:0]cur_second,
     output [5:0]work_hours,[5:0]work_minutes,
     
     output [5:0]hand_time//手势开关的时间
@@ -142,12 +142,15 @@ module hood_top1 (
         //输出
         .hour(hour),// 当前小时
         .minute(minute),// 当前分钟
-//        .second(second),// 当前秒数
+        .second(second),// 当前秒数
         
         .work_hours(work_hours),// 累计工作时长（单位：小时）
         .work_minutes(work_minutes),//累积工作分钟
         .remind(remind)        
     );
+    assign cur_hour=hour;
+    assign cur_min=minute;
+    assign cur_second=second;
 //-----------------------------------------------------------------------------------------
     all_output outputs(
     .power_on(power_on)
