@@ -97,7 +97,7 @@ module times(
                 end
                 else
                 begin
-                        if (state == 2'b01) begin
+                        if (state == 2'b10) begin
                             work_time_counter<= work_time_counter + 1;  // Ã¿ÃëÖÓ¼ÆÊ±
                            if (work_time_counter == 100) begin
                                 work_second <= work_second + 1;
