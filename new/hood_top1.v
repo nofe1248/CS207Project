@@ -134,6 +134,7 @@ module hood_top1 (
         .clk_100Hz(clk_100Hz),
         .reset(reset),
         .power_on(power_on),
+        .resetchuchang(resetchuchang),
         
         .set_all_times(set_all_times),
         .btn_time_set( btn_time_set),// ±º‰…Ë÷√

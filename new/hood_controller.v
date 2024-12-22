@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 module hood_controller (
-    input clk,clk_100Hz,reset,power_on,// 时钟信号100MHz，短时间信号100Hz,菜单信号,返回信号，开机信号
+    input clk,clk_100Hz,reset,power_on,resetchuchang,// 时钟信号100MHz，短时间信号100Hz,菜单信号,返回信号，开机信号
     
 //    input [15:0]CLEANING_DELAY,
     
@@ -105,6 +105,9 @@ module hood_controller (
                     if(power_on)begin
                             if(state_smoke_lvl==OFF)begin
                                 state_smoke_lvl<=STANDBY;state<=STANDBY1;
+                            end
+                            if(resetchuchang)begin
+                                  state_smoke_lvl<=STANDBY;state<=STANDBY1;
                             end
                             if(xinhao)begin
                                 if(state_smoke_lvl==STANDBY)begin

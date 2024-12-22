@@ -21,7 +21,7 @@
 
 
 module times(
-    input clk,clk_100Hz,reset,power_on,
+    input clk,clk_100Hz,reset,power_on,resetchuchang,
     
     input [1:0]set_all_times,[5:0]btn_time_set,[5:0]btn_min_set,//时间设置
     input [1:0]state,
@@ -80,7 +80,7 @@ module times(
     reg [5:0] work_second;
     // 抽油烟工作时长统计与智能提醒
     always @(posedge clk_100Hz , posedge reset) begin
-        if(reset)begin
+        if(reset | resetchuchang )begin
             work_time_counter<=0;
             work_hours<=0;
             work_minutes<=0;
