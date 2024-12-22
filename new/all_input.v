@@ -72,7 +72,7 @@ module all_input(
     reg ifopen;
     reg [6:0]count;
     reg[5:0]second;
-    always @(posedge clk ,posedge reset) begin
+    always @(posedge clk_100Hz ,posedge reset) begin
         if(reset)
         begin
             counter<=0;
@@ -86,6 +86,9 @@ module all_input(
         begin
             if(set_all_times==2'b11)begin
                 hand_time<=btn_time_set;
+            end
+            if(resetchuchang)begin
+                hand_time<=5'd5;
             end
           
             if(last_stable_button_state==0 && stable_button_state==1)//¸Õ°´ÏÂ
