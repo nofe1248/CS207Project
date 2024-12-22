@@ -46,7 +46,8 @@ module hood_top1 (
     output [5:0]cur_hour,[5:0]cur_min,[5:0]cur_second,
     output [5:0]work_hours,[5:0]work_minutes,
     
-    output [5:0]hand_time//手势开关的时间
+    output [5:0]hand_time,//手势开关的时间
+    output  remind
 );
     wire state;
     //分频
@@ -111,7 +112,7 @@ module hood_top1 (
     wire [5:0] minute;
     wire [5:0] second;
 //    wire [15:0] work_hours;
-    wire remind;
+    
     hood_controller controller (
         .clk(clk),
         .clk_100Hz(clk_100Hz),

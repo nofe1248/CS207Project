@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module light(
-inout clk,reset,power_on,light,
+input clk,reset,power_on,light,
 output reg light_on
     );
      //根据menu来形成一个信号使得可以实现状态的改变和回退,按下之后会有一个为1的信号
@@ -35,6 +35,7 @@ output reg light_on
                stable_light_state<=0;
                last_stable_light_state<=0;
                state_meta<=0;
+               xinhao<=0;
            end 
            else 
            begin
@@ -70,15 +71,17 @@ output reg light_on
                 end
                 else if(last_stable_light_state==1 && stable_light_state==0)
                 begin
-                if(counter>0)begin
-                    xinhao<=1;
+                    if(counter>0)begin
+                        xinhao<=1;
+                        counter<=0;
+                    end
                 end
-                if(xinhao)begin
-                    light_on<=light;
-                    xinhao<=0;
-                end
+                    if(xinhao)begin
+                        light_on<=~light_on;
+                        xinhao<=0;
+                    end
             end
         end
     end
-    end
+   
 endmodule
