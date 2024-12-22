@@ -23,13 +23,13 @@
 module frequency_divider(
     input clk,reset,             // 输入时钟信号 (100 MHz)
     output reg clk_out,    // 输出时钟信号 (1 Hz)
-    output reg clk_out2//输出100Hz
+    output reg clk_out2//输出
 );
 
     // 目标分频值：100 MHz -> 1 Hz
     // 需要分频 100,000,000
     localparam DIV_VALUE = 100_000_000;  
-    localparam DIV_VALUE2 = 1_000_000;
+    localparam DIV_VALUE2 = 500_000;
     reg [26:0] counter;
     reg [19:0] counter2;  
     always @(posedge clk,posedge reset) 

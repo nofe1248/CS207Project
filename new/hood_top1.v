@@ -19,80 +19,98 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 module hood_top1 (
-    input clk, reset, btn_on_off,// æ—¶é’Ÿä¿¡å·,å¤ä½ä¿¡å· ,å¼€å…³æœºæŒ‰é”®ä¿¡å·
+    input clk, reset, btn_on_off,                // Ê±ÖÓĞÅºÅ, ,¿ª¹Ø»ú°´¼ü
+    input btn_hand1,btn_hand2,//ÊÖÊÆ¿ª¹Ø
     
-    input set,// è°ƒæ•´å‡ºåœºè®¾ç½®å°±æ˜¯è®¾ç½®å‚æ•°ï¼Œç”¨æŒ‰é’®
-    input [3:0] times,//ä¿®æ”¹å†…éƒ¨è®¾ç½®
+//    input set,// µ÷Õû³ö³¡ÉèÖÃ
+//    input [3:0] times,//ĞŞ¸ÄÄÚ²¿ÉèÖÃ
      
-    input menu,//å¯ä»¥æ§åˆ¶æ˜¯å¦å¯ä»¥è°ƒæ§æ¨¡å¼ï¼ŒæŒ‰é’®
-    input [3:0] btn_mode_smoke,//æ¨¡å¼ä¸æŒ¡ä½
+    input menu,//¿ÉÒÔ¿ØÖÆÊÇ·ñ¿ÉÒÔµ÷¿ØÄ£Ê½
+    input [3:0] btn_mode_smoke,//Ä£Ê½Óëµ²Î»
 
 
-    input [1:0]set_all_times,//è®¾ç½®å†…éƒ¨æ—¶é—´
-    input [5:0] btn_time_set,//æ—¶é—´è®¾ç½®é”®
-    input light,//æ˜¯å¦å¼€ç¯
+    input resetchuchang,//¸´Î»ĞÅºÅ
+    input [1:0]set_all_times,//
+    input [5:0] btn_time_set,//Ê±¼äÉèÖÃ¼ü
+    input [5:0] btn_min_set,
     
-    output button,//æµ‹è¯•ä½¿ç”¨ï¼Œä¸éœ€è¦å®ä¾‹åŒ–
-    output light_on,// ç…§æ˜åŠŸèƒ½
-    output clk_out,//æµ‹è¯•ä½¿ç”¨ï¼Œä¸éœ€è¦å®ä¾‹åŒ–
-    output ifoutput,//æ˜¯å¦å¼€æœº
-    output [3:0] state_smoke_lvl,//æ¡£ä½
-    output xinhao1//æµ‹è¯•ä½¿ç”¨ï¼Œä¸éœ€è¦å®ä¾‹åŒ–
+    input light,
+    
+//    output button,
+    output light_on,// ÕÕÃ÷¹¦ÄÜ
+//    output clk_out,
+    output ifoutput,
+    output [3:0] state_smoke_lvl,
+//    output xinhao1
+
+    output [5:0]cur_hour,[5:0]cur_min,
+    output [5:0]work_hours,[5:0]work_minutes,
+    
+    output [5:0]hand_time//ÊÖÊÆ¿ª¹ØµÄÊ±¼ä
 );
     wire state;
-    //åˆ†é¢‘
-    wire clk_1Hz;//ä¸€ç§’çš„Â·é¢‘ç‡
+    //·ÖÆµ
+    wire clk_1Hz;//Ò»ÃëµÄ¡¤ÆµÂÊ
     wire clk_100Hz;
     frequency_divider frequency(
     .clk(clk),
     .reset(reset),
-    //è¾“å‡º
+    //Êä³ö
     .clk_out(clk_1Hz),
     .clk_out2(clk_100Hz)
     );
-    assign clk_out=clk_1Hz;
+//    assign clk_out=clk_1Hz;
     //---------------------------------------------------------------------------------
-    //å¼€å…³æœº
+    //¿ª¹Ø»ú
     wire power_on;
     all_input inputs(
       .clk_100Hz(clk_100Hz),
       .clk(clk),
       .reset(reset),
-      .power_button(btn_on_off),//å¼€å…³é”®
-      //è¾“å‡º
-      .power_on(power_on) // å¼€å…³æœºçŠ¶æ€è¾“å‡º
+      .power_button(btn_on_off),//¿ª¹Ø¼ü
+      .btn_hand1(btn_hand1),
+      .btn_hand2(btn_hand2),
+      
+      .resetchuchang(resetchuchang),
+      .set_all_times(set_all_times),
+      .btn_time_set(btn_time_set),
+      
+      //Êä³ö
+      .power_on(power_on), // ¿ª¹Ø»ú×´Ì¬Êä³ö
+      
+      .hand_time(hand_time)
       );
       assign ifoutput=power_on;
-      assign button=btn_on_off;
+//      assign button=btn_on_off;
       //----------------------------------------------------------------------------
-      //æ—¶é—´è®¾ç½®
-    wire [3:0] initials[3:0];//æé†’çš„æ—¶é—´ï¼Œè‡ªæ¸…æ´çš„æ—¶é—´ï¼Œä¸‰æ¡£çš„å€’è®¡æ—¶ï¼Œå¼€å…³æœºçš„æ—¶é—´
-    resets resets(
-    .clk(clk),
-    .set(set),
-    .reset(reset),
-    .times(times),
-    //è¾“å‡º
-    .out_data0(initials[0]),
-    .out_data1(initials[1]),
-    .out_data2(initials[2]),
-    .out_data3(initials[3])
-    );
+      //Ê±¼äÉèÖÃ
+//    wire [3:0] initials[3:0];//ÌáĞÑµÄÊ±¼ä£¬×ÔÇå½àµÄÊ±¼ä£¬ÈıµµµÄµ¹¼ÆÊ±£¬¿ª¹Ø»úµÄÊ±¼ä
+//    resets resets(
+//    .clk(clk),
+//    .set(set),
+//    .reset(reset),
+//    .times(times),
+//    //Êä³ö
+//    .out_data0(initials[0]),
+//    .out_data1(initials[1]),
+//    .out_data2(initials[2]),
+//    .out_data3(initials[3])
+//    );
   //----------------------------------------------------------------------------------
-  //ç¯çš„å¼€å…³
+  //µÆµÄ¿ª¹Ø
   light lighton(
     .clk(clk),
     .reset(reset),
     .power_on(power_on),
     .light(light),
-    //è¾“å‡º
+    //Êä³ö
     .light_on(light_on)
   );
   //----------------------------------------------------------------------------------
     wire [5:0] hour;
     wire [5:0] minute;
     wire [5:0] second;
-    wire [15:0] work_hours;
+//    wire [15:0] work_hours;
     wire remind;
     hood_controller controller (
         .clk(clk),
@@ -100,14 +118,14 @@ module hood_top1 (
         .reset(reset),
         .menu(menu),
         .power_on(power_on),
-        .CLEANING_DELAY(initials[1]),
+//        .CLEANING_DELAY(initials[1]),
         
         .btn_mode_smoke(btn_mode_smoke),
         
-        //è¾“å‡º
-        .state(state),// å½“å‰çŠ¶æ€
-        .state_smoke_lvl(state_smoke_lvl),
-        .xinhao1(xinhao1)
+        //Êä³ö
+        .state(state),// µ±Ç°×´Ì¬
+        .state_smoke_lvl(state_smoke_lvl)
+//        .xinhao1(xinhao1)
     );
 //-----------------------------------------------------------------------------------------
     times all_times(
@@ -117,14 +135,17 @@ module hood_top1 (
         .power_on(power_on),
         
         .set_all_times(set_all_times),
-        .btn_time_set( btn_time_set),//æ—¶é—´è®¾ç½®
-        .state(state),// å½“å‰çŠ¶æ€        
-        //è¾“å‡º
-        .hour(hour),// å½“å‰å°æ—¶
-        .minute(minute),// å½“å‰åˆ†é’Ÿ
-        .second(second),// å½“å‰ç§’æ•°
+        .btn_time_set( btn_time_set),//Ê±¼äÉèÖÃ
+        .btn_min_set(btn_min_set),
         
-        .work_hours(work_hours),// ç´¯è®¡å·¥ä½œæ—¶é•¿ï¼ˆå•ä½ï¼šå°æ—¶ï¼‰
+        .state(state),// µ±Ç°×´Ì¬        
+        //Êä³ö
+        .hour(hour),// µ±Ç°Ğ¡Ê±
+        .minute(minute),// µ±Ç°·ÖÖÓ
+//        .second(second),// µ±Ç°ÃëÊı
+        
+        .work_hours(work_hours),// ÀÛ¼Æ¹¤×÷Ê±³¤£¨µ¥Î»£ºĞ¡Ê±£©
+        .work_minutes(work_minutes),//ÀÛ»ı¹¤×÷·ÖÖÓ
         .remind(remind)        
     );
 //-----------------------------------------------------------------------------------------
