@@ -26,12 +26,12 @@ module times(
     input [1:0]set_all_times,[5:0]btn_time_set,[5:0]btn_min_set,//时间设置
     input [1:0]state,
     
-    output reg [5:0] hour,reg [5:0] minute,
+    output reg [5:0] hour,reg [5:0] minute,reg[5:0]second,
     output reg [5:0] work_hours,reg[5:0]work_minutes,// 累计工作时长（单位：小时）
     output reg remind
     );
         // 计时器和工作时长
-            reg[5:0]second;
+//            reg[5:0]second;
             reg [6:0] time_counter;    // 用于秒计时
            
     // 时间显示更新逻辑
