@@ -27,12 +27,14 @@ module hood_controller (
     input [3:0] btn_mode_smoke,//模式与挡位
         
     output reg [1:0] state,     // 当前状态
-    output reg [3:0] state_smoke_lvl
+    output reg [3:0] state_smoke_lvl,
+    output [5:0] countsecond
     
 //    output xinhao1
 
 );
-    
+    reg lvl3_ifopen;
+    reg lvl3_ifreturn;
     //根据menu来形成一个信号使得可以实现状态的改变和回退,按下之后会有一个为1的信号
     reg xinhao;
     reg [8:0] counter;        // 计时器，用于检测长按时间
@@ -79,6 +81,8 @@ module hood_controller (
         begin
             counter<=0;
             xinhao<=0;state_smoke_lvl<=OFF;state<=OFF1;
+            lvl3_ifopen<=0;
+            lvl3_ifreturn<=0;
         end
         else
         begin
@@ -121,8 +125,11 @@ module hood_controller (
                                             xinhao<=0;
                                         end
                                         SMOKING_lvl3:begin
-                                            state_smoke_lvl<=SMOKING_lvl3;state<=SMOKING1;
-                                            xinhao<=0;
+                                            if(lvl3_ifopen==0)begin
+                                                state_smoke_lvl<=SMOKING_lvl3;state<=SMOKING1;
+                                                xinhao<=0;
+                                                lvl3_ifopen<=1;
+                                             end
                                         end
                                         CLEANING:begin
                                             state_smoke_lvl<=CLEANING;state<=CLEANING1;
@@ -137,6 +144,7 @@ module hood_controller (
                                     xinhao<=0;
                                 end
                                 else if(state_smoke_lvl==SMOKING_lvl3)begin
+                                    lvl3_ifreturn<=1;
                                     xinhao<=0;
                                 end
                                 else
@@ -152,9 +160,14 @@ module hood_controller (
                                         state_smoke_lvl<=STANDBY;state<=STANDBY1;
                                     end
                                 end
-                                if(state_smoke_lvl==SMOKING_lvl3)begin
+                                if(state_smoke_lvl==SMOKING_lvl3 )begin
                                     if(SMOKING_lvl3_done)begin
-                                        state_smoke_lvl<=STANDBY;state<=STANDBY1;
+                                        if(lvl3_ifreturn)begin
+                                            state_smoke_lvl<=STANDBY;state<=STANDBY1;
+                                        end
+                                        else begin
+                                            state_smoke_lvl<=SMOKING_lvl2;state<=SMOKING1;
+                                        end
                                     end
                                 end
                             end
@@ -162,6 +175,7 @@ module hood_controller (
                      else
                      begin
                         state_smoke_lvl<=OFF;state<=OFF1;
+                        lvl3_ifopen<=0;
                      end
             end
         end
@@ -213,6 +227,7 @@ module hood_controller (
     reg [5:0]SMOKING_lvl3_second;
     reg [6:0] SMOKING_lvl3_counter;    // 用于秒计时 
     localparam SMOKING_lvl3_DELAY=6'd60;//reg [5:0]CLEANING_DELAY;
+    assign countsecond=SMOKING_lvl3_DELAY-SMOKING_lvl3_second;
        // SMOKING_lvl3完成
    always @(posedge clk_100Hz , posedge reset) begin
        if(reset)begin

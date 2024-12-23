@@ -47,7 +47,8 @@ module hood_top1 (
     output [5:0]work_hours,[5:0]work_minutes,
     
     output [5:0]hand_time,//手势开关的时间
-    output  remind
+    output  remind,
+    output [5:0]countsecond
 );
     wire state;
     //分频
@@ -125,7 +126,8 @@ module hood_top1 (
         
         //输出
         .state(state),// 当前状态
-        .state_smoke_lvl(state_smoke_lvl)
+        .state_smoke_lvl(state_smoke_lvl),
+        .countsecond(countsecond)
 //        .xinhao1(xinhao1)
     );
 //-----------------------------------------------------------------------------------------
